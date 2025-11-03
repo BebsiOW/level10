@@ -4,6 +4,8 @@
 
 #include "fileutil.h"
 
+#define CAPACITY_START 20
+
 // DIRECTIONS
 // Choose whether you are doing the 2D array or
 // the array of arrays.
@@ -60,11 +62,31 @@ char (*loadFile2D(char *filename, int *size))[COLS]
 	//   Copy each line from the buffer into the array (use strcpy).
     // Close the file.
 	
+	char (*arr)[COLS] = malloc(CAPACITY * sizeof(char[COLS]));
+	size = 0;
+	char line[1000];
+	int capacity = CAPACITY_START;
+
+    while(fgets(line, 1000, in) != NULL)
+    {
+        if(size == capacity)
+		{
+			CAPACITY += 10;
+			arr = realloc(arr, capacity * sizeof(char[COLS]));
+		}
+
+		char *nl = strchr(line, '\n');
+        if (nl) *nl = '\0';
+
+		strcpy(arr[size], line);
+    }
+
+	close(in);
 	// The size should be the number of entries in the array.
-	*size = 0;
+	size++
 	
 	// Return pointer to the array.
-	return NULL;
+	return arr;
 }
 
 // Search the array for the target string.
