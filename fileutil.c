@@ -63,8 +63,8 @@ char (*loadFile2D(char *filename, int *size))[COLS]
     // Close the file.
 	
 	char (*arr)[COLS] = malloc(CAPACITY * sizeof(char[COLS]));
-	size = 0;
 	char line[1000];
+	int entries = 0;
 	int capacity = CAPACITY_START;
 
     while(fgets(line, 1000, in) != NULL)
@@ -79,12 +79,12 @@ char (*loadFile2D(char *filename, int *size))[COLS]
         if (nl) *nl = '\0';
 
 		strcpy(arr[size], line);
+		entries++;
     }
 
 	close(in);
 	// The size should be the number of entries in the array.
-	size++
-	
+	*size = entries;
 	// Return pointer to the array.
 	return arr;
 }
