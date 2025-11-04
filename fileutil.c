@@ -61,25 +61,27 @@ char (*loadFile2D(char *filename, int *size))[COLS]
 	//   Expand array if necessary (realloc).
 	//   Copy each line from the buffer into the array (use strcpy).
     // Close the file.
-	
-	char (*arr)[COLS] = malloc(CAPACITY * sizeof(char[COLS]));
+
+	int capacity = CAPACITY_START;	
+	char (*arr)[COLS] = malloc(capacity * sizeof(char[COLS]));
+
 	char line[1000];
 	int entries = 0;
-	int capacity = CAPACITY_START;
+	
 
     while(fgets(line, 1000, in) != NULL)
     {
-        if(size == capacity)
+		char *nl = strchr(line, '\n');
+        if (nl) *nl = '\0';
+
+		if(size == capacity)
 		{
 			CAPACITY += 10;
 			arr = realloc(arr, capacity * sizeof(char[COLS]));
 		}
 
-		char *nl = strchr(line, '\n');
-        if (nl) *nl = '\0';
-
-		strcpy(arr[size], line);
-		entries++;
+        strcpy(arr[entries], line);
+        entries++;
     }
 
 	close(in);
@@ -99,7 +101,13 @@ char * substringSearchAA(char *target, char **lines, int size)
 
 char * substringSearch2D(char *target, char (*lines)[COLS], int size)
 {
-    
+    for (int i = 0; i < size; i++)
+	{
+		if(strstr(lines[i], target) != NULL)
+		{
+			return lines[i];
+		}
+	}
     return NULL;
 }
 
