@@ -74,9 +74,9 @@ char (*loadFile2D(char *filename, int *size))[COLS]
 		char *nl = strchr(line, '\n');
         if (nl) *nl = '\0';
 
-		if(size == capacity)
+		if(entries == capacity)
 		{
-			CAPACITY += 10;
+			capacity += 10;
 			arr = realloc(arr, capacity * sizeof(char[COLS]));
 		}
 
@@ -84,7 +84,7 @@ char (*loadFile2D(char *filename, int *size))[COLS]
         entries++;
     }
 
-	close(in);
+	fclose(in);
 	// The size should be the number of entries in the array.
 	*size = entries;
 	// Return pointer to the array.
@@ -119,5 +119,5 @@ void freeAA(char ** arr, int size)
 
 void free2D(char (*arr)[COLS])
 {
-
+	free(arr);
 }
